@@ -223,7 +223,7 @@ class SocketClient {
     try {
       socketChannel =
           (await config.connect(Uri.parse(url), protocols)).forGraphQL();
-      ;
+      _connectionStateController.add(SocketConnectionState.connected);
       print('Connected to websocket.');
       _write(initOperation);
 
