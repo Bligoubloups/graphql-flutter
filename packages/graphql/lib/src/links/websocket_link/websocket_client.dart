@@ -22,7 +22,7 @@ import './websocket_messages.dart';
 typedef GetInitPayload = FutureOr<dynamic> Function();
 
 /// A definition for functions that returns a connected [WebSocketChannel]
-typedef WebSocketConnect = WebSocketChannel Function(
+typedef WebSocketConnect = FutureOr<WebSocketChannel> Function(
   Uri uri,
   Iterable<String>? protocols,
 );
@@ -102,11 +102,13 @@ class SocketClientConfig {
   /// ```
   final WebSocketConnect connect;
 
-  static WebSocketChannel defaultConnect(
+  static Future<WebSocketChannel> defaultConnect(
     Uri uri,
     Iterable<String>? protocols,
-  ) =>
-      WebSocketChannel.connect(uri, protocols: protocols).forGraphQL();
+  ) async {
+    return (await WebSocketChannel.connect(uri, protocols: protocols))
+        .forGraphQL();
+  }
 
   /// Payload to be sent with the connection_init request.
   ///
@@ -219,11 +221,9 @@ class SocketClient {
     print('Connecting to websocket: $url...');
 
     try {
-      // Even though config.connect is sync, we call async in order to make the
-      // SocketConnectionState.connected attribution not overload SocketConnectionState.connecting
       socketChannel =
-          await config.connect(Uri.parse(url), protocols).forGraphQL();
-      _connectionStateController.add(SocketConnectionState.connected);
+          (await config.connect(Uri.parse(url), protocols)).forGraphQL();
+      ;
       print('Connected to websocket.');
       _write(initOperation);
 
