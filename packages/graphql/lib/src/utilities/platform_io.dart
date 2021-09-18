@@ -11,6 +11,7 @@ Future<WebSocketChannel> defaultConnectPlatform(
   Uri uri,
   Iterable<String>? protocols,
 ) async {
-  final sock = await WebSocket.connect(uri.toString(), protocols: protocols);
-  return IOWebSocketChannel(sock).forGraphQL();
+  final webSocket =
+      await WebSocket.connect(uri.toString(), protocols: protocols);
+  return IOWebSocketChannel(webSocket).forGraphQL();
 }

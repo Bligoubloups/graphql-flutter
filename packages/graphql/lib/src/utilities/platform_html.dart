@@ -8,6 +8,7 @@ Future<WebSocketChannel> defaultConnectPlatform(
   Uri uri,
   Iterable<String>? protocols,
 ) async {
-  return (await WebSocketChannel.connect(uri, protocols: protocols))
-      .forGraphQL();
+  final webSocketChannel =
+      await WebSocketChannel.connect(uri, protocols: protocols);
+  return webSocketChannel.forGraphQL();
 }
