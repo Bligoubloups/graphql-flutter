@@ -224,6 +224,8 @@ class SocketClient {
     print('Connecting to websocket: $url...');
 
     try {
+      // Even though config.connect is sync, we call async in order to make the
+      // SocketConnectionState.connected attribution not overload SocketConnectionState.connecting
       socketChannel =
           (await config.connect(Uri.parse(url), protocols)).forGraphQL();
       _connectionStateController.add(SocketConnectionState.connected);
