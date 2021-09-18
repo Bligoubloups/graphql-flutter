@@ -1,2 +1,13 @@
+import 'package:graphql/src/links/websocket_link/websocket_client.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
+
 final isHtml = false;
 final isIo = false;
+
+Future<WebSocketChannel> defaultConnectPlatform(
+  Uri uri,
+  Iterable<String>? protocols,
+) async {
+  return (await WebSocketChannel.connect(uri, protocols: protocols))
+      .forGraphQL();
+}

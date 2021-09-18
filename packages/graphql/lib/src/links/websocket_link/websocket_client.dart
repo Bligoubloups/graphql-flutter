@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:graphql/src/links/gql_links.dart';
+import 'package:graphql/src/utilities/platform.dart';
 import 'package:meta/meta.dart';
 
 import 'package:graphql/src/core/query_options.dart' show WithType;
@@ -106,8 +107,10 @@ class SocketClientConfig {
     Uri uri,
     Iterable<String>? protocols,
   ) async {
-    return (await WebSocketChannel.connect(uri, protocols: protocols))
-        .forGraphQL();
+    return defaultConnectPlatform(
+      uri,
+      protocols,
+    );
   }
 
   /// Payload to be sent with the connection_init request.
